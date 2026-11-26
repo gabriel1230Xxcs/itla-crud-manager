@@ -13,6 +13,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($data['apellido'] === '') $errors[] = 'El apellido es obligatorio.';
     if (!filter_var($data['correo'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Introduce un correo válido.';
     if ($data['carrera'] === '') $errors[] = 'La carrera es obligatoria.';
+    
+if (mb_strlen($data['matricula']) > 30) {
+    $errors[] = 'La matrícula no puede superar los 30 caracteres.';
+}
+
+if (mb_strlen($data['nombre']) > 80) {
+    $errors[] = 'El nombre no puede superar los 80 caracteres.';
+}
+
+if (mb_strlen($data['apellido']) > 80) {
+    $errors[] = 'El apellido no puede superar los 80 caracteres.';
+}
+
+if (mb_strlen($data['correo']) > 150) {
+    $errors[] = 'El correo no puede superar los 150 caracteres.';
+}
+
+if (mb_strlen($data['carrera']) > 120) {
+    $errors[] = 'La carrera no puede superar los 120 caracteres.';
+}
 
     if (!$errors) {
         try {
