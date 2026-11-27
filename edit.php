@@ -16,6 +16,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($data['matricula'] === '' || $data['nombre'] === '' || $data['apellido'] === '' || $data['carrera'] === '') $errors[] = 'Todos los campos son obligatorios.';
     if (!filter_var($data['correo'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Introduce un correo válido.';
     if (!$errors) {
+        // Validar longitud máxima de los campos
+if (mb_strlen($data['matricula']) > 30) {
+    $errors[] = 'La matrícula no puede superar los 30 caracteres.';
+}
+
+if (mb_strlen($data['nombre']) > 80) {
+    $errors[] = 'El nombre no puede superar los 80 caracteres.';
+}
+
+if (mb_strlen($data['apellido']) > 80) {
+    $errors[] = 'El apellido no puede superar los 80 caracteres.';
+}
+
+if (mb_strlen($data['correo']) > 150) {
+    $errors[] = 'El correo no puede superar los 150 caracteres.';
+}
+
+if (mb_strlen($data['carrera']) > 120) {
+    $errors[] = 'La carrera no puede superar los 120 caracteres.';
+}
         try {
             $update = $pdo->prepare('UPDATE estudiantes SET matricula=:matricula,nombre=:nombre,apellido=:apellido,correo=:correo,carrera=:carrera WHERE id=:id');
             $update->execute(['matricula'=>$data['matricula'],'nombre'=>$data['nombre'],'apellido'=>$data['apellido'],'correo'=>$data['correo'],'carrera'=>$data['carrera'],'id'=>$id]);
