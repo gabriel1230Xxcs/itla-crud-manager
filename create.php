@@ -9,6 +9,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     foreach ($data as $key => $_) $data[$key] = trim($_POST[$key] ?? '');
     if ($data['matricula'] === '') $errors[] = 'La matrícula es obligatoria.';
+    if (strlen($data['matricula']) > 20) {
+    $errors[] = 'La matrícula no puede superar 20 caracteres.';
+}
+
+if (strlen($data['nombre']) > 60) {
+    $errors[] = 'El nombre no puede superar 60 caracteres.';
+}
+
+if (strlen($data['apellido']) > 60) {
+    $errors[] = 'El apellido no puede superar 60 caracteres.';
+}
     if ($data['nombre'] === '') $errors[] = 'El nombre es obligatorio.';
     if ($data['apellido'] === '') $errors[] = 'El apellido es obligatorio.';
     if (!filter_var($data['correo'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Introduce un correo válido.';
