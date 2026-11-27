@@ -8,6 +8,36 @@ $pageTitle = 'Estudiantes | ITLA CRUD Manager';
 
 $q = trim($_GET['q'] ?? '');
 
+$orden = $_GET['orden'] ?? 'fecha';
+
+$ordenPermitido = ['fecha', 'nombre', 'matricula'];
+
+if (!in_array($orden, $ordenPermitido, true)) {
+    $orden = 'fecha';
+}
+
+$orderBy = 'id DESC';
+
+if ($orden === 'nombre') {
+    $orderBy = 'nombre ASC, apellido ASC';
+} elseif ($orden === 'matricula') {
+    $orderBy = 'matricula ASC';
+}
+
+$orden = $_GET['orden'] ?? 'fecha';
+
+$ordenesPermitidos = [
+    'nombre' => 'nombre ASC',
+    'matricula' => 'matricula ASC',
+    'fecha' => 'id DESC'
+];
+
+if (!isset($ordenesPermitidos[$orden])) {
+    $orden = 'fecha';
+}
+
+$ordenSQL = $ordenesPermitidos[$orden];
+
 $students = [];
 $errorMessage = '';
 
@@ -32,7 +62,7 @@ try {
                OR apellido LIKE ?
                OR correo LIKE ?
                OR carrera LIKE ?
-            ORDER BY id DESC
+            ORDER BY {$ordenSQL}
         ";
 
         $stmt = $pdo->prepare($sql);
@@ -59,7 +89,7 @@ try {
                 carrera,
                 created_at
             FROM estudiantes
-            ORDER BY id DESC
+            ORDER BY $orderBy
         ";
 
         $stmt = $pdo->query($sql);
@@ -124,6 +154,17 @@ require __DIR__ . '/header.php';
 <section class="panel">
 
     <form class="search" method="get" action="index.php">
+      <select name="orden" onchange="this.form.submit()">
+    <option value="fecha" <?= $orden === 'fecha' ? 'selected' : '' ?>>
+        Más recientes
+    </option>
+    <option value="nombre" <?= $orden === 'nombre' ? 'selected' : '' ?>>
+        Nombre (A-Z)
+    </option>
+    <option value="matricula" <?= $orden === 'matricula' ? 'selected' : '' ?>>
+        Matrícula
+    </option>
+</select>
 
         <input
             type="search"
