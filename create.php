@@ -24,6 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data[$key] = trim($_POST[$key] ?? '');
     }
 
+    $data['correo'] = mb_strtolower($data['correo'], 'UTF-8');
+
+
     // Validar campos obligatorios
     if ($data['matricula'] === '') {
         $errors[] = 'La matrícula es obligatoria.';
