@@ -24,6 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data[$key] = trim($_POST[$key] ?? '');
     }
 
+    $data['correo'] = mb_strtolower($data['correo'], 'UTF-8');
+
+
     // Validar campos obligatorios
     if ($data['matricula'] === '') {
         $errors[] = 'La matrícula es obligatoria.';
@@ -41,27 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'El correo es obligatorio.';
     } elseif (!filter_var($data['correo'], FILTER_VALIDATE_EMAIL)) {
         $errors[] = 'Introduce un correo válido.';
-
-        // Validar longitud máxima de los campos
-if (mb_strlen($data['matricula']) > 30) {
-    $errors[] = 'La matrícula no puede superar los 30 caracteres.';
-}
-
-if (mb_strlen($data['nombre']) > 80) {
-    $errors[] = 'El nombre no puede superar los 80 caracteres.';
-}
-
-if (mb_strlen($data['apellido']) > 80) {
-    $errors[] = 'El apellido no puede superar los 80 caracteres.';
-}
-
-if (mb_strlen($data['correo']) > 150) {
-    $errors[] = 'El correo no puede superar los 150 caracteres.';
-}
-
-if (mb_strlen($data['carrera']) > 120) {
-    $errors[] = 'La carrera no puede superar los 120 caracteres.';
-}
     }
 
     if ($data['carrera'] === '') {
